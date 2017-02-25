@@ -21,6 +21,16 @@
 
             return this.players;
         }
+
+        makeDeck() {
+            this.suits.forEach(suit => {
+                this.ranks.forEach(rank => {
+                    this.deck.push(new Card(suit, rank));
+                });
+            });
+
+            return this.deck;
+        }
         
     }
 
