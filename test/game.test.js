@@ -37,6 +37,14 @@ describe('Game class', () => {
         assert.notDeepEqual(preShuffled, game.deck);
     });
 
+    it('deals the cards', () => {
+        let cardAmount = Math.floor(game.deck.length / game.players.length);
+        game.dealCards(game.players, game.deck);
+        game.players.forEach(player => {
+            assert.equal(cardAmount, player.hand.length);
+        });
+    });
+
 });
 
 

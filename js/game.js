@@ -44,6 +44,16 @@
             }
             return deck;
         }
+
+        dealCards(players, deck) {
+            let cardsLeft = deck;
+            while(cardsLeft.length >= players.length) {
+                players.forEach(player => {
+                    let dealtCard = cardsLeft.pop();
+                    player.hand.push(dealtCard);         
+                });
+            }
+        }
         
     }
 
