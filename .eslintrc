@@ -30,6 +30,8 @@
         ]
     },
     "globals": {
+        "Game": false,
+        "Card": false,
         "chai": false
     }
 }
