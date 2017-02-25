@@ -3,7 +3,7 @@ const assert = chai.assert;
 
 describe('Game class', () => {
 
-    it('makes a game with available suits ranks', done => {
+    it('makes a game with available suits and ranks', done => {
         let game = new Game();
         let expectedSuits = ['hearts', 'spades', 'diamonds', 'clubs'];
         let expectedRanks = [2,3,4,5,6,7,8,9,10,11,12,13,14];
@@ -18,6 +18,14 @@ describe('Game class', () => {
         let expectedDeck = [];
         assert.deepEqual(expectedPlayers, game.players);
         assert.deepEqual(expectedDeck, game.deck);
+        done();
+    });
+
+    it('creates correct number of players', done => {
+        let game = new Game();
+        let numberOfPlayers = 3;
+        game.createPlayers(numberOfPlayers);
+        assert.equal(numberOfPlayers, game.players.length);
         done();
     });
 
