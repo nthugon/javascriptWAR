@@ -1,0 +1,36 @@
+{
+    "parserOptions": {
+		"ecmaVersion": 6,
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"modules": true,
+			"experimentalObjectRestSpread": true,
+			"impliedStrict": true
+		}
+	},
+    "extends": "eslint:recommended",
+    "env": {
+        "node": true,
+        "mocha": true,
+        "es6": true
+    },
+    "rules": {
+        "no-console": "off",
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
+    },
+    "globals": {
+        "chai": false
+    }
+}
+
