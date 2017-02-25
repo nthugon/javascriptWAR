@@ -31,6 +31,19 @@
 
             return this.deck;
         }
+
+        shuffleDeck(deck) {
+            let cardsStillUnshuffled = deck.length;
+            let randomFromUnshuffled;
+            let lastOfUnshuffled;
+            while(cardsStillUnshuffled) {
+                randomFromUnshuffled = Math.floor(Math.random() * cardsStillUnshuffled--);
+                lastOfUnshuffled = deck[cardsStillUnshuffled];
+                deck[cardsStillUnshuffled] = deck[randomFromUnshuffled];
+                deck[randomFromUnshuffled] = lastOfUnshuffled;
+            }
+            return deck;
+        }
         
     }
 
