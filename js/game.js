@@ -96,6 +96,44 @@
                 console.log(`${this.players[0].name} is the winner!`);
             }
         }
+
+        playWar (pot) {
+            console.log('playing WAR');
+            let warCards = [];
+            let highCard = 0;
+            let winner = null;
+            let war = false;
+            for (let i = this.players.length - 1; i >= 0; i--) {
+                if (this.players[i].hand.length < 2) {
+                    console.log(`${this.players[i].name} is out!`);
+                    pot.push(...this.players[i].hand);
+                    this.players.splice(i, 1);
+                }
+            }
+            this.players.forEach(player => {
+                let potCard = player.hand.pop();
+                pot.push(potCard);
+                let warCard = player.hand.pop();
+                console.log(`${player.name}'s warCard is the ${warCard.rank} of ${warCard.suit}`);
+                warCards.push(warCard);
+            });
+            for (let i = 0; i < warCards.length; i++) {
+                if (warCards[i].rank > highCard) {
+                    highCard = warCards[i].rank;
+                    winner = this.players[i];
+                    war = false;
+                } else if (warCards[i].rank === highCard) {
+                    war = true;
+                }
+            }
+            pot.push(...warCards);
+            if (war) {
+                this.playWar(pot);
+            } else {
+                console.log(`${winner.name} won this WAR hand!`);
+                winner.hand.unshift(...pot);
+            }
+        }
         
     }
 

@@ -4,7 +4,29 @@ const assert = chai.assert;
 describe('Game class', () => {
 
     let game = new Game();
-    let startingHandAmount;
+    let numberOfPlayers = 3;
+    let startingTestHandAmount;
+
+    function makeTestCards(players) {
+        for (let i = 0; i < players.length; i++) {
+            players[i].hand = [
+                new Card('test', i + 2),
+                new Card('test', i + 5),
+                new Card('test', i + 8)
+            ];
+            startingTestHandAmount = 3;
+        }
+    }
+
+    function makeWARtestCards(players) {
+        makeTestCards(players);
+        players.forEach(player => {
+            player.hand.push(
+                new Card('test', 11)
+            );
+        });
+        startingTestHandAmount++;
+    }
 
     it('makes a game with available suits and ranks', () => {
         let expectedSuits = ['hearts', 'spades', 'diamonds', 'clubs'];
@@ -21,7 +43,6 @@ describe('Game class', () => {
     });
 
     it('creates correct number of players', () => {
-        let numberOfPlayers = 3;
         game.createPlayers(numberOfPlayers);
         assert.equal(numberOfPlayers, game.players.length);
     });
@@ -39,7 +60,7 @@ describe('Game class', () => {
     });
 
     it('deals the cards', () => {
-        startingHandAmount = Math.floor(game.deck.length / game.players.length);
+        let startingHandAmount = Math.floor(game.deck.length / game.players.length);
         game.dealCards(game.players, game.deck);
         game.players.forEach(player => {
             assert.equal(startingHandAmount, player.hand.length);
@@ -47,14 +68,22 @@ describe('Game class', () => {
     });
 
     it('playRound function executes correctly when no WAR', () => {
-        let numberOfPlayers = game.players.length;
-        for (let i = 0; i < numberOfPlayers; i++) {
-            game.players[i].hand.push({rank: i + 2, suit: 'hearts'});
-        }
+        makeTestCards(game.players);
         game.playRound();
-        let winnersHandAmount = startingHandAmount + numberOfPlayers;
-        let lastPlayer = game.players[numberOfPlayers - 1];
-        assert.equal(winnersHandAmount, lastPlayer.hand.length);
+        let cardsToBeWon = numberOfPlayers - 1;
+        let winnersHandAmount = startingTestHandAmount + cardsToBeWon;
+        let expectedWinner = game.players[numberOfPlayers - 1];
+        assert.equal(winnersHandAmount, expectedWinner.hand.length);
+    });
+
+    it('playRound function executes playWar function correctly when WAR', () => {
+        makeWARtestCards(game.players);
+        game.playRound();
+        let cardsToBeWon = (numberOfPlayers * 3) - 3;
+        let winnersHandAmount = startingTestHandAmount + cardsToBeWon;
+        let expectedWinner = game.players[numberOfPlayers - 1];
+        assert.equal(winnersHandAmount, expectedWinner.hand.length);
+
     });
 
 });
