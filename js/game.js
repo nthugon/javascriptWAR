@@ -54,6 +54,48 @@
                 });
             }
         }
+
+        playRound () {
+            if (this.players.length === 1) {
+                console.log(`${this.players[0].name} is the winner!`);
+                return;
+            }
+            let pot = [];
+            let highCard = 0;
+            let winner = null;
+            let war = false;
+
+            this.players.forEach(player => {
+                let card = player.hand.pop();
+                console.log(`${player.name}'s initial card is ${card.rank} of ${card.suit}`);
+                pot.push(card);
+            });
+            for(let i = 0; i < pot.length; i++) {
+                if (pot[i].rank > highCard) {
+                    highCard = pot[i].rank;
+                    winner = this.players[i];
+                    war = false;
+                } else if (pot[i].rank === highCard) {
+                    war = true;
+                }
+            }
+            if (war) {
+                this.playWar(pot);
+            } else {
+                console.log(`${winner.name} won this hand!`);
+                winner.hand.unshift(...pot);
+            }
+            for (let i = this.players.length - 1; i >= 0; i--) {
+                console.log(`${this.players[i].name} has ${this.players[i].hand.length} cards left`);
+                if (this.players[i].hand.length === 0) {
+                    console.log(`${this.players[i].name} is out!`);
+                    this.players.splice(i, 1);
+                }
+            }
+            if (this.players.length === 1) {
+                console.log(`${this.players[0].name} is the winner!`);
+            }
+        }
         
     }
 
