@@ -33,9 +33,9 @@ var play = function() {
 };
 
 function playRound() {
-    playersInfo.innerHTML = '';   
+    playersInfo.innerHTML = '';
+    console.log('Playing Round');   
     showCards();
-    console.log('Playing Round');
     game.playRound();
     if (game.war) {
         warMessage();

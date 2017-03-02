@@ -9,6 +9,9 @@
             this.players = [];
             this.war = false;
             this.pot = [];
+            this.highCard = 0;
+            this.winner = null;
+            this.warCards = [];
         }
 
         createPlayers(numberOfPlayers) {
@@ -55,9 +58,45 @@
             }
         }
 
+        playRound () {
+            if (this.players.length === 1) {
+                return;
+            }
+            this.pot = [];
+            this.resetTrackers();
+            this.putCardsIn(this.pot);
+            this.findWinner(this.pot);
+            if (this.war) {
+                return;
+            } else {
+                this.winner.hand.unshift(...this.pot);
+            }
+            this.removeLosers();
+        }
+
+        playWar () {
+            this.resetTrackers();
+            for (let i = this.players.length - 1; i >= 0; i--) {
+                if (this.players[i].hand.length < 2) {
+                    this.pot.push(...this.players[i].hand);
+                    this.players.splice(i, 1);
+                }
+            }
+            this.putCardsIn(this.pot);
+            this.putCardsIn(this.warCards);
+            this.findWinner(this.warCards);
+            this.pot.push(...this.warCards);
+            if (this.war) {
+                return;
+            } else {
+                this.winner.hand.unshift(...this.pot);
+            }
+            this.removeLosers();
+        }
+
         getInt (card) {
             switch(card.rank) {
-            case '0':
+            case 0:
                 return 10;
             case 'J':
                 return 11;
@@ -72,77 +111,40 @@
             }
         }
 
-        playRound () {
-            if (this.players.length === 1) {
-                return;
-            }
-            this.pot = [];
-            let highCard = 0;
-            let winner = null;
-            this.players.forEach(player => {
-                let card = player.hand.pop();
-                this.pot.push(card);
-            });
-            for(let i = 0; i < this.pot.length; i++) {
-                if (this.getInt(this.pot[i]) > highCard) {
-                    highCard = this.getInt(this.pot[i]);
-                    winner = this.players[i];
+        findWinner (cardsToCompare) {
+            for(let i = 0; i < cardsToCompare.length; i++) {
+                if (this.getInt(cardsToCompare[i]) > this.highCard) {
+                    this.highCard = this.getInt(cardsToCompare[i]);
+                    this.winner = this.players[i];
                     this.war = false;
-                } else if (this.getInt(this.pot[i]) === highCard) {
+                } else if (this.getInt(cardsToCompare[i]) === this.highCard) {
                     this.war = true;
-                }
-            }
-            if (this.war) {
-                return;
-            } else {
-                winner.hand.unshift(...this.pot);
-            }
-            for (let i = this.players.length - 1; i >= 0; i--) {
-                if (this.players[i].hand.length === 0) {
-                    this.players.splice(i, 1);
                 }
             }
         }
 
-        playWar () {
-            let warCards = [];
-            let highCard = 0;
-            let winner = null;
+        resetTrackers () {
+            this.highCard = 0;
+            this.winner = null;
             this.war = false;
-            for (let i = this.players.length - 1; i >= 0; i--) {
-                if (this.players[i].hand.length < 2) {
-                    this.pot.push(...this.players[i].hand);
-                    this.players.splice(i, 1);
-                }
-            }
+            this.warCards = [];
+        }
+
+        putCardsIn (destination) {
             this.players.forEach(player => {
-                let potCard = player.hand.pop();
-                this.pot.push(potCard);
-                let warCard = player.hand.pop();
-                warCards.push(warCard);
+                let card = player.hand.pop();
+                destination.push(card);
             });
-            for (let i = 0; i < warCards.length; i++) {
-                if (this.getInt(warCards[i]) > highCard) {
-                    highCard = this.getInt(warCards[i]);
-                    winner = this.players[i];
-                    this.war = false;
-                } else if (this.getInt(warCards[i]) === highCard) {
-                    this.war = true;
-                }
-            }
-            this.pot.push(...warCards);
-            if (this.war) {
-                return;
-            } else {
-                winner.hand.unshift(...this.pot);
-            }
+        }
+
+        removeLosers () {
             for (let i = this.players.length - 1; i >= 0; i--) {
                 if (this.players[i].hand.length === 0) {
                     this.players.splice(i, 1);
                 }
             }
         }
-        
+       
     }
 
     exports.Game = Game;

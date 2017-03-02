@@ -41,24 +41,24 @@ describe('Game class', () => {
         assert.deepEqual(expectedDeck, game.deck);
     });
 
-    it('creates correct number of players', () => {
+    it('createPlayers method creates correct number of players', () => {
         game.createPlayers(numberOfPlayers);
         assert.equal(numberOfPlayers, game.players.length);
     });
 
-    it('creates correct number of cards', () => {
+    it('makeDeck method creates correct number of cards', () => {
         let expectedCards = 52;
         game.makeDeck();
         assert.equal(expectedCards, game.deck.length);
     });
 
-    it('shuffles the cards', () => {
+    it('shuffleDeck method shuffles the cards', () => {
         let preShuffled = game.deck.slice();
         game.shuffleDeck(game.deck);
         assert.notDeepEqual(preShuffled, game.deck);
     });
 
-    it('deals the cards', () => {
+    it('dealCards method deals the cards', () => {
         let startingHandAmount = Math.floor(game.deck.length / game.players.length);
         game.dealCards(game.players, game.deck);
         game.players.forEach(player => {
@@ -70,6 +70,34 @@ describe('Game class', () => {
         let card = new Card('test', 'Q');
         let expectedRankInt = 12;
         assert.equal(expectedRankInt, game.getInt(card));
+    });
+
+    it('putCardsIn method moves cards from players to destination', () => {
+        makeTestCards(game.players);
+        let expectedCards = game.players.map(player => {
+            return player.hand[player.hand.length - 1];
+
+        });
+        game.putCardsIn(game.pot);
+        assert.deepEqual(expectedCards, game.pot);
+    });
+
+    it('findWinner method identifys the player with the highest card', () => {
+        let expectedWinner = game.players[2];
+        game.findWinner(game.pot);
+        assert.deepEqual(expectedWinner, game.winner);       
+    });
+
+    it('resetTrackers method clears values of tracking variables', () => {
+        let expectedWinner = null;
+        let expectedHighCard = 0;
+        let expectedWarCards = [];
+        let expectedWar = false;
+        game.resetTrackers();
+        assert.equal(expectedWinner, game.winner);
+        assert.equal(expectedHighCard, game.highCard);
+        assert.deepEqual(expectedWarCards, game.warCards);
+        assert.equal(expectedWar, game.war);
     });
 
     it('playRound method executes correctly when no WAR', () => {
@@ -89,6 +117,14 @@ describe('Game class', () => {
         let winnersHandAmount = startingTestHandAmount + cardsToBeWon;
         let expectedWinner = game.players[numberOfPlayers - 1];
         assert.equal(winnersHandAmount, expectedWinner.hand.length);
+    });
+
+    it('removeLosers method removes players without cards', () => {
+        makeTestCards(game.players);
+        game.players[0].hand = [];
+        let expectedNumberOfPlayers = 2;
+        game.removeLosers();
+        assert.equal(expectedNumberOfPlayers, game.players.length);
     });
 
 });
