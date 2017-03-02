@@ -7,7 +7,7 @@ To play the game, open the `index.html` file with a browser.
 
 To play the game in the browser window simply follw the on screen instructions. Each hand of the game must be played individually when done in the window.
 
-To run every cycle of an entire game and see the results of each hand printed, you can run the automatedGame function in the console providing the number of players as the argument to that function.
+To run every cycle of an entire game and see the results of each hand printed, you can run the automatedGame function in the console providing the number of players as the argument to that function. `automatedGame(3);` typed in the console will play the game with 3 players. 
 
 ## Unit Tests
 To see the results of unit tests, open the `card-test.html` and/or `game-test.html` files in the browser. These files are located in the test directory. The unit tests are run using Mocha and Chai. The results of the unit tests will be displayed in the window.
