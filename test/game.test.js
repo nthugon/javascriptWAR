@@ -22,7 +22,7 @@ describe('Game class', () => {
         makeTestCards(players);
         players.forEach(player => {
             player.hand.push(
-                new Card('test', 11)
+                new Card('test', 'J')
             );
         });
         startingTestHandAmount++;
@@ -30,7 +30,7 @@ describe('Game class', () => {
 
     it('makes a game with available suits and ranks', () => {
         let expectedSuits = ['H', 'S', 'D', 'C'];
-        let expectedRanks = [2,3,4,5,6,7,8,9,10,11,12,13,14];
+        let expectedRanks = [2,3,4,5,6,7,8,9,0,'J','Q','K','A'];
         assert.deepEqual(expectedSuits, game.suits);
         assert.deepEqual(expectedRanks, game.ranks);
     });
@@ -67,7 +67,13 @@ describe('Game class', () => {
         });
     });
 
-    it('playRound function executes correctly when no WAR', () => {
+    it('getInt method translates rank to integer', () => {
+        let card = new Card('test', 'Q');
+        let expectedRankInt = 12;
+        assert.equal(expectedRankInt, game.getInt(card));
+    });
+
+    it('playRound method executes correctly when no WAR', () => {
         makeTestCards(game.players);
         game.playRound();
         let cardsToBeWon = numberOfPlayers - 1;
@@ -76,7 +82,7 @@ describe('Game class', () => {
         assert.equal(winnersHandAmount, expectedWinner.hand.length);
     });
 
-    it('playWar function executes correctly when WAR', () => {
+    it('playWar method executes correctly when WAR', () => {
         makeWARtestCards(game.players);
         game.playRound();
         game.playWar();

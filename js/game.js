@@ -4,7 +4,7 @@
 
         constructor () {
             this.suits = ['H', 'S', 'D', 'C'];
-            this.ranks = [2,3,4,5,6,7,8,9,10,11,12,13,14];
+            this.ranks = [2,3,4,5,6,7,8,9,0,'J','Q','K','A'];
             this.deck = [];
             this.players = [];
             this.war = false;
@@ -57,6 +57,23 @@
             }
         }
 
+        getInt (card) {
+            switch(card.rank) {
+            case '0':
+                return 10;
+            case 'J':
+                return 11;
+            case 'Q':
+                return 12;
+            case 'K':
+                return 13;
+            case 'A':
+                return 14;
+            default:
+                return card.rank;
+            }
+        }
+
         playRound () {
             if (this.players.length === 1) {
                 // console.log(`${this.players[0].name} is the winner!`);
@@ -73,11 +90,11 @@
                 this.pot.push(card);
             });
             for(let i = 0; i < this.pot.length; i++) {
-                if (this.pot[i].rank > highCard) {
-                    highCard = this.pot[i].rank;
+                if (this.getInt(this.pot[i]) > highCard) {
+                    highCard = this.getInt(this.pot[i]);
                     winner = this.players[i];
                     this.war = false;
-                } else if (this.pot[i].rank === highCard) {
+                } else if (this.getInt(this.pot[i]) === highCard) {
                     this.war = true;
                 }
             }
@@ -122,11 +139,11 @@
                 warCards.push(warCard);
             });
             for (let i = 0; i < warCards.length; i++) {
-                if (warCards[i].rank > highCard) {
-                    highCard = warCards[i].rank;
+                if (this.getInt(warCards[i]) > highCard) {
+                    highCard = this.getInt(warCards[i]);
                     winner = this.players[i];
                     this.war = false;
-                } else if (warCards[i].rank === highCard) {
+                } else if (this.getInt(warCards[i]) === highCard) {
                     this.war = true;
                 }
             }

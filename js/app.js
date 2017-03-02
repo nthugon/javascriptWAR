@@ -37,18 +37,35 @@ var playWar = function () {
         let card = document.createElement("li");
         if (player.hand.length >= 2) {
             let currentCard = player.hand[player.hand.length - 2];        
-            card.innerText = `${currentCard.rank} of ${currentCard.suit}`;  
+            card.innerText = `${currentCard.rank} of ${currentCard.suit}`;
+            console.log(`${player.name} has the ${currentCard.rank} of ${currentCard.suit} card with ${player.hand.length} cards left`);  
         } else {
             card.innerText = 'Not Enough Cards to play WAR';
+            console.log(`${player.name} does not have enough cards to play WAR`);
         }
         cardSlot.appendChild(card); 
         playersCards.appendChild(cardSlot);
     });
 
     game.playWar();
+    if (game.war) {
+        let warDiv = document.createElement("div");
+        let warMessage = document.createElement("h2");
+        warMessage.innerText = "We Have a WAR! Press the 'Play WAR' button to continue";
+        warDiv.appendChild(warMessage);
+        playersCards.appendChild(warDiv);
+        playRoundButton.innerText = 'Play WAR';
+        console.log('Playing WAR!');
+    }
+    if (game.players.length === 1) {
+        playersCards.innerHTML = '';
+        let winnerMessage = document.createElement("h2");
+        winnerMessage.innerText = `${game.players[0].name} is the winner!`;
+        playersCards.appendChild(winnerMessage);
+        console.log(`${game.players[0].name} is the winner!`);
+        return;
+    }
     playRoundButton.innerText = 'Play Round';
-    console.log('WAR');
-
 };
 
 var play = function() {
@@ -61,8 +78,10 @@ var play = function() {
 
 var playRound = function() {
     playersCards.innerHTML = '';
+    console.log('Playing Round');
     game.players.forEach(player => {
         let currentCard = player.hand[player.hand.length - 1];
+        console.log(`${player.name} has the ${currentCard.rank} of ${currentCard.suit} card with ${player.hand.length} cards left`);
         let cardSlot = document.createElement("div");
         let playerName = document.createElement("h2");
         playerName.innerText = player.name;
@@ -86,15 +105,16 @@ var playRound = function() {
         warDiv.appendChild(warMessage);
         playersCards.appendChild(warDiv);
         playRoundButton.innerText = 'Play WAR';
+        console.log('Playing WAR!');
     }
     if (game.players.length === 1) {
         playersCards.innerHTML = '';
         let winnerMessage = document.createElement("h2");
         winnerMessage.innerText = `${game.players[0].name} is the winner!`;
         playersCards.appendChild(winnerMessage);
+        console.log(`${game.players[0].name} is the winner!`);
         return;
     }
-    console.log('regular');
 };
 
 startGameButton.addEventListener("click", startGame);
