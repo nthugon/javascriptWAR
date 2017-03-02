@@ -3,10 +3,12 @@
     class Game {
 
         constructor () {
-            this.suits = ['hearts', 'spades', 'diamonds', 'clubs'];
+            this.suits = ['H', 'S', 'D', 'C'];
             this.ranks = [2,3,4,5,6,7,8,9,10,11,12,13,14];
             this.deck = [];
             this.players = [];
+            this.war = false;
+            this.pot = [];
         }
 
         createPlayers(numberOfPlayers) {
@@ -57,81 +59,104 @@
 
         playRound () {
             if (this.players.length === 1) {
-                console.log(`${this.players[0].name} is the winner!`);
+                // console.log(`${this.players[0].name} is the winner!`);
                 return;
             }
-            let pot = [];
+            this.pot = [];
             let highCard = 0;
             let winner = null;
-            let war = false;
+            // let war = false;
 
             this.players.forEach(player => {
                 let card = player.hand.pop();
-                console.log(`${player.name}'s initial card is ${card.rank} of ${card.suit}`);
-                pot.push(card);
+                // console.log(`${player.name}'s initial card is ${card.rank} of ${card.suit}`);
+                this.pot.push(card);
             });
-            for(let i = 0; i < pot.length; i++) {
-                if (pot[i].rank > highCard) {
-                    highCard = pot[i].rank;
+            for(let i = 0; i < this.pot.length; i++) {
+                if (this.pot[i].rank > highCard) {
+                    highCard = this.pot[i].rank;
                     winner = this.players[i];
-                    war = false;
-                } else if (pot[i].rank === highCard) {
-                    war = true;
+                    this.war = false;
+                } else if (this.pot[i].rank === highCard) {
+                    this.war = true;
                 }
             }
-            if (war) {
-                this.playWar(pot);
+            if (this.war) {
+                return;
+                // this.playWar(pot);
             } else {
-                console.log(`${winner.name} won this hand!`);
-                winner.hand.unshift(...pot);
+                // console.log(`${winner.name} won this hand!`);
+                winner.hand.unshift(...this.pot);
             }
             for (let i = this.players.length - 1; i >= 0; i--) {
-                console.log(`${this.players[i].name} has ${this.players[i].hand.length} cards left`);
+                // console.log(`${this.players[i].name} has ${this.players[i].hand.length} cards left`);
                 if (this.players[i].hand.length === 0) {
-                    console.log(`${this.players[i].name} is out!`);
+                    // console.log(`${this.players[i].name} is out!`);
                     this.players.splice(i, 1);
                 }
             }
             if (this.players.length === 1) {
-                console.log(`${this.players[0].name} is the winner!`);
+                // console.log(`${this.players[0].name} is the winner!`);
             }
         }
 
-        playWar (pot) {
-            console.log('playing WAR');
+        playWar () {
+            // console.log('playing WAR');
             let warCards = [];
             let highCard = 0;
             let winner = null;
-            let war = false;
+            // let war = false;
+            this.war = false;
             for (let i = this.players.length - 1; i >= 0; i--) {
                 if (this.players[i].hand.length < 2) {
-                    console.log(`${this.players[i].name} is out!`);
-                    pot.push(...this.players[i].hand);
+                    // console.log(`${this.players[i].name} is out!`);
+                    this.pot.push(...this.players[i].hand);
                     this.players.splice(i, 1);
                 }
             }
             this.players.forEach(player => {
                 let potCard = player.hand.pop();
-                pot.push(potCard);
+                this.pot.push(potCard);
                 let warCard = player.hand.pop();
-                console.log(`${player.name}'s warCard is the ${warCard.rank} of ${warCard.suit}`);
+                // console.log(`${player.name}'s warCard is the ${warCard.rank} of ${warCard.suit}`);
                 warCards.push(warCard);
             });
             for (let i = 0; i < warCards.length; i++) {
                 if (warCards[i].rank > highCard) {
                     highCard = warCards[i].rank;
                     winner = this.players[i];
-                    war = false;
+                    this.war = false;
                 } else if (warCards[i].rank === highCard) {
-                    war = true;
+                    this.war = true;
                 }
             }
-            pot.push(...warCards);
-            if (war) {
-                this.playWar(pot);
+            this.pot.push(...warCards);
+            if (this.war) {
+                return;
+                // this.playWar(this.pot);
             } else {
-                console.log(`${winner.name} won this WAR hand!`);
-                winner.hand.unshift(...pot);
+                // console.log(`${winner.name} won this WAR hand!`);
+                winner.hand.unshift(...this.pot);
+            }
+            for (let i = this.players.length - 1; i >= 0; i--) {
+                // console.log(`${this.players[i].name} has ${this.players[i].hand.length} cards left`);
+                if (this.players[i].hand.length === 0) {
+                    // console.log(`${this.players[i].name} is out!`);
+                    this.players.splice(i, 1);
+                }
+            }
+            if (this.players.length === 1) {
+                // console.log(`${this.players[0].name} is the winner!`);
+            }
+        }
+
+        playGame (numberOfPlayers) {
+            this.createPlayers(numberOfPlayers);
+            this.makeDeck();
+            this.shuffleDeck(this.deck);
+            this.dealCards(this.players, this.deck);
+            while (this.players.length > 1) {
+                this.playRound();
             }
         }
         
@@ -140,5 +165,6 @@
     exports.Game = Game;
 
 })(this);
+
 
 

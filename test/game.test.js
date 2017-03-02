@@ -29,7 +29,7 @@ describe('Game class', () => {
     }
 
     it('makes a game with available suits and ranks', () => {
-        let expectedSuits = ['hearts', 'spades', 'diamonds', 'clubs'];
+        let expectedSuits = ['H', 'S', 'D', 'C'];
         let expectedRanks = [2,3,4,5,6,7,8,9,10,11,12,13,14];
         assert.deepEqual(expectedSuits, game.suits);
         assert.deepEqual(expectedRanks, game.ranks);
@@ -76,14 +76,14 @@ describe('Game class', () => {
         assert.equal(winnersHandAmount, expectedWinner.hand.length);
     });
 
-    it('playRound function executes playWar function correctly when WAR', () => {
+    it('playWar function executes correctly when WAR', () => {
         makeWARtestCards(game.players);
         game.playRound();
+        game.playWar();
         let cardsToBeWon = (numberOfPlayers * 3) - 3;
         let winnersHandAmount = startingTestHandAmount + cardsToBeWon;
         let expectedWinner = game.players[numberOfPlayers - 1];
         assert.equal(winnersHandAmount, expectedWinner.hand.length);
-
     });
 
 });
