@@ -1,7 +1,7 @@
 const startGameButton = document.getElementById("startGame");
 const playRoundButton = document.getElementById("playRound");
 const numberOfPlayers = document.getElementById("numberOfPlayers");
-const playersCards = document.getElementById("playersCards");
+const playersInfo = document.getElementById("playersInfo");
 var game;
 
 function automatedGame (players) { // eslint-disable-line no-unused-vars
@@ -16,7 +16,7 @@ function automatedGame (players) { // eslint-disable-line no-unused-vars
 }
 
 var startGame = function() {
-    playersCards.innerHTML = "Push 'Play Round' button to begin";
+    playersInfo.innerHTML = "Push 'Play Round' button to begin";
     game = new Game();
     game.createPlayers(numberOfPlayers.value);
     game.makeDeck();
@@ -33,48 +33,64 @@ var play = function() {
 };
 
 function playRound() {
-    playersCards.innerHTML = '';
+    playersInfo.innerHTML = '';   
+    showCards();
     console.log('Playing Round');
-    game.players.forEach(player => {
-        let currentCard = player.hand[player.hand.length - 1];
-        console.log(`${player.name} has the ${currentCard.rank} of ${currentCard.suit} card with ${player.hand.length} cards left`);
-        let cardSlot = document.createElement("div");
-        let playerName = document.createElement("h2");
-        playerName.innerText = player.name;
-        cardSlot.appendChild(playerName);
-        let cardTotal = document.createElement("li");
-        cardTotal.innerText = `${player.hand.length} Cards Left`;
-        cardSlot.appendChild(cardTotal);
-        let card = document.createElement("img");
-        card.src = `https://deckofcardsapi.com/static/img/${currentCard.rank}${currentCard.suit}.png`;
-        // let card = document.createElement("li");
-        // card.innerText = `${currentCard.rank} of ${currentCard.suit}`;
-        cardSlot.appendChild(card);
-        playersCards.appendChild(cardSlot);
-
-    });
     game.playRound();
     if (game.war) {
-        let warDiv = document.createElement("div");
-        let warMessage = document.createElement("h2");
-        warMessage.innerText = "We Have a WAR! Press the 'Play WAR' button to continue";
-        warDiv.appendChild(warMessage);
-        playersCards.appendChild(warDiv);
-        playRoundButton.innerText = 'Play WAR';
-        console.log('Playing WAR!');
+        warMessage();
     }
     if (game.players.length === 1) {
-        playersCards.innerHTML = '';
-        let winnerMessage = document.createElement("h2");
-        winnerMessage.innerText = `${game.players[0].name} is the winner!`;
-        playersCards.appendChild(winnerMessage);
-        console.log(`${game.players[0].name} is the winner!`);
+        announceWinner();
         return;
     }
 }
 
 function playWar() {
-    playersCards.innerHTML = '';
+    playersInfo.innerHTML = '';
+    showCards();
+    game.playWar();
+    playRoundButton.innerText = 'Play Round';
+    if (game.war) {
+        warMessage();
+    }
+    if (game.players.length === 1) {
+        announceWinner();
+        return;
+    }
+}
+
+function warMessage () {
+    let warDiv = document.createElement("div");
+    let warMessage = document.createElement("h2");
+    warMessage.innerText = "We Have a WAR! Press the 'Play WAR' button to continue";
+    warDiv.appendChild(warMessage);
+    playersInfo.appendChild(warDiv);
+    playRoundButton.innerText = 'Play WAR';
+    console.log('Playing WAR!');
+}
+
+function announceWinner () {
+    playersInfo.innerHTML = '';
+    let winnerMessage = document.createElement("h2");
+    winnerMessage.innerText = `${game.players[0].name} is the winner!`;
+    playersInfo.appendChild(winnerMessage);
+    console.log(`${game.players[0].name} is the winner!`);
+}
+
+function showCards () {   
+    function getCardInfo (player, cardSlot) {
+        let card = document.createElement("img");
+        let currentCard = null;
+        if (game.war) {
+            currentCard = player.hand[player.hand.length - 2];
+        } else {
+            currentCard = player.hand[player.hand.length - 1];
+        }
+        card.src = `https://deckofcardsapi.com/static/img/${currentCard.rank}${currentCard.suit}.png`;
+        cardSlot.appendChild(card);
+        console.log(`${player.name} has the ${currentCard.rank} of ${currentCard.suit} card with ${player.hand.length} cards left`);
+    }
     game.players.forEach(player => {
         let cardSlot = document.createElement("div");
         let playerName = document.createElement("h2");
@@ -83,38 +99,20 @@ function playWar() {
         let cardTotal = document.createElement("li");
         cardTotal.innerText = `${player.hand.length} Cards Left`;
         cardSlot.appendChild(cardTotal);
-        let card = document.createElement("img");
-        if (player.hand.length >= 2) {
-            let currentCard = player.hand[player.hand.length - 2]; 
-            card.src = `https://deckofcardsapi.com/static/img/${currentCard.rank}${currentCard.suit}.png`;       
-            console.log(`${player.name} has the ${currentCard.rank} of ${currentCard.suit} card with ${player.hand.length} cards left`);  
+        if (game.war) {
+            if (player.hand.length >= 2) {
+                getCardInfo(player, cardSlot); 
+            } else {
+                let notEnough = document.createElement("li");
+                notEnough.innerText = 'Not Enough Cards to play WAR';
+                cardSlot.appendChild(notEnough);
+                console.log(`${player.name} does not have enough cards to play WAR`);
+            }
         } else {
-            card.innerText = 'Not Enough Cards to play WAR';
-            console.log(`${player.name} does not have enough cards to play WAR`);
+            getCardInfo(player, cardSlot);
         }
-        cardSlot.appendChild(card); 
-        playersCards.appendChild(cardSlot);
+        playersInfo.appendChild(cardSlot);
     });
-
-    game.playWar();
-    if (game.war) {
-        let warDiv = document.createElement("div");
-        let warMessage = document.createElement("h2");
-        warMessage.innerText = "We Have a WAR! Press the 'Play WAR' button to continue";
-        warDiv.appendChild(warMessage);
-        playersCards.appendChild(warDiv);
-        playRoundButton.innerText = 'Play WAR';
-        console.log('Playing WAR!');
-    }
-    if (game.players.length === 1) {
-        playersCards.innerHTML = '';
-        let winnerMessage = document.createElement("h2");
-        winnerMessage.innerText = `${game.players[0].name} is the winner!`;
-        playersCards.appendChild(winnerMessage);
-        console.log(`${game.players[0].name} is the winner!`);
-        return;
-    }
-    playRoundButton.innerText = 'Play Round';
 }
 
 startGameButton.addEventListener("click", startGame);

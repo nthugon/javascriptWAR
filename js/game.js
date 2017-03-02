@@ -20,7 +20,6 @@
                 this.players.unshift(newPlayer);
                 playerCount--;
             }
-
             return this.players;
         }
 
@@ -30,7 +29,6 @@
                     this.deck.push(new Card(suit, rank));
                 });
             });
-
             return this.deck;
         }
 
@@ -81,7 +79,6 @@
             this.pot = [];
             let highCard = 0;
             let winner = null;
-
             this.players.forEach(player => {
                 let card = player.hand.pop();
                 this.pot.push(card);
