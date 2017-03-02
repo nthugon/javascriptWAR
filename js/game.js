@@ -76,17 +76,14 @@
 
         playRound () {
             if (this.players.length === 1) {
-                // console.log(`${this.players[0].name} is the winner!`);
                 return;
             }
             this.pot = [];
             let highCard = 0;
             let winner = null;
-            // let war = false;
 
             this.players.forEach(player => {
                 let card = player.hand.pop();
-                // console.log(`${player.name}'s initial card is ${card.rank} of ${card.suit}`);
                 this.pot.push(card);
             });
             for(let i = 0; i < this.pot.length; i++) {
@@ -100,33 +97,23 @@
             }
             if (this.war) {
                 return;
-                // this.playWar(pot);
             } else {
-                // console.log(`${winner.name} won this hand!`);
                 winner.hand.unshift(...this.pot);
             }
             for (let i = this.players.length - 1; i >= 0; i--) {
-                // console.log(`${this.players[i].name} has ${this.players[i].hand.length} cards left`);
                 if (this.players[i].hand.length === 0) {
-                    // console.log(`${this.players[i].name} is out!`);
                     this.players.splice(i, 1);
                 }
-            }
-            if (this.players.length === 1) {
-                // console.log(`${this.players[0].name} is the winner!`);
             }
         }
 
         playWar () {
-            // console.log('playing WAR');
             let warCards = [];
             let highCard = 0;
             let winner = null;
-            // let war = false;
             this.war = false;
             for (let i = this.players.length - 1; i >= 0; i--) {
                 if (this.players[i].hand.length < 2) {
-                    // console.log(`${this.players[i].name} is out!`);
                     this.pot.push(...this.players[i].hand);
                     this.players.splice(i, 1);
                 }
@@ -135,7 +122,6 @@
                 let potCard = player.hand.pop();
                 this.pot.push(potCard);
                 let warCard = player.hand.pop();
-                // console.log(`${player.name}'s warCard is the ${warCard.rank} of ${warCard.suit}`);
                 warCards.push(warCard);
             });
             for (let i = 0; i < warCards.length; i++) {
@@ -150,30 +136,13 @@
             this.pot.push(...warCards);
             if (this.war) {
                 return;
-                // this.playWar(this.pot);
             } else {
-                // console.log(`${winner.name} won this WAR hand!`);
                 winner.hand.unshift(...this.pot);
             }
             for (let i = this.players.length - 1; i >= 0; i--) {
-                // console.log(`${this.players[i].name} has ${this.players[i].hand.length} cards left`);
                 if (this.players[i].hand.length === 0) {
-                    // console.log(`${this.players[i].name} is out!`);
                     this.players.splice(i, 1);
                 }
-            }
-            if (this.players.length === 1) {
-                // console.log(`${this.players[0].name} is the winner!`);
-            }
-        }
-
-        playGame (numberOfPlayers) {
-            this.createPlayers(numberOfPlayers);
-            this.makeDeck();
-            this.shuffleDeck(this.deck);
-            this.dealCards(this.players, this.deck);
-            while (this.players.length > 1) {
-                this.playRound();
             }
         }
         

@@ -1,6 +1,5 @@
 const assert = chai.assert;
 
-
 describe('Game class', () => {
 
     let game = new Game();
