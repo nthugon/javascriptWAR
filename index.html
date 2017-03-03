@@ -4,15 +4,29 @@
     <meta charset="utf-8">
     <title>WAR</title>
     <link rel="stylesheet" href="css/normalize.css">
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu:400,700,' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <h1>WAR</h1>
-    <label for="numberOfPlayers">Number of Players</label>
-    <input id="numberOfPlayers" type="number" min="2" max="5">
-    <button id="startGame">Start New Game</button>
-    <button id="playRound">Play Round</button>
-    <div id="playersInfo"></div>
+    <h1 id="heading">WAR</h1>
+    <div id="controls">
+        <label for="numberOfPlayers">Number of Players</label>
+        <input id="numberOfPlayers" type="number" value="2" min="2" max="4">
+        <button id="startGame">Start New Game</button>
+        <button id="playRound">Play Round</button>
+    </div>
+    <div id="playersInfo">
+        <div id="welcome">
+            <h2>Welcome to the game of WAR!</h2>
+            <ul>
+            <li>This is the same game you remember from your childhood!</li>
+            <li>The player with the highest card takes the cards from that round.</li>
+            <li>If there is a tie between the highest value cards, then we have WAR!</li>
+            <li>When there is WAR, each player puts a card into the pot, and then shows their next card. The player with the highest card showing wins the cards!</li>
+            <li>Select the amount of players and press 'Start New Game' to play!</li>
+            </ul>
+        </div>
+    </div>
     <script src="js/card.js"></script>
     <script src="js/game.js"></script>
     <script src="js/app.js"></script>

@@ -17,7 +17,7 @@ function automatedGame (players) { // eslint-disable-line no-unused-vars
 }
 
 var startGame = function() {
-    playersInfo.innerHTML = "Push 'Play Round' button to begin";
+    playersInfo.innerText = "Push 'Play Round' button to begin";
     game = new Game();
     game.createPlayers(numberOfPlayers.value);
     game.makeDeck();
@@ -39,6 +39,7 @@ function playRound() {
     console.log('Playing Round');   
     showCards();
     game.playRound();
+    whoWonRound();
     if (game.war) {
         warMessage();
     }
@@ -51,6 +52,7 @@ function playWar() {
     playersInfo.innerHTML = '';
     showCards();
     game.playWar();
+    whoWonRound();
     // toggle name of button
     playRoundButton.innerText = 'Play Round';
     if (game.war) {
@@ -63,6 +65,7 @@ function playWar() {
 }
 
 function warMessage () {
+    playersInfo.removeChild(playersInfo.lastChild);
     let warDiv = document.createElement("div");
     let warMessage = document.createElement("h2");
     warMessage.innerText = "We Have a WAR! Press the 'Play WAR' button to continue";
@@ -82,6 +85,15 @@ function announceWinner () {
     console.log(`${game.players[0].name} is the winner!`);
 }
 
+function whoWonRound () {
+    let winnerDiv = document.createElement("div");
+    let winnerMessage = document.createElement("h2");
+    winnerMessage.innerText = `${game.winner.name} won this round!`;
+    winnerDiv.appendChild(winnerMessage);
+    playersInfo.appendChild(winnerDiv);
+    console.log(`${game.winner.name} won this round!`);
+}
+
 function showCards () {   
     function getCardInfo (player, cardSlot) {
         let card = document.createElement("img");
@@ -99,10 +111,11 @@ function showCards () {
     }
     game.players.forEach(player => {
         let cardSlot = document.createElement("div");
+        cardSlot.classList.add("cardSlot");
         let playerName = document.createElement("h2");
         playerName.innerText = player.name;
         cardSlot.appendChild(playerName);
-        let cardTotal = document.createElement("li");
+        let cardTotal = document.createElement("p");
         cardTotal.innerText = `${player.hand.length} Cards Left`;
         cardSlot.appendChild(cardTotal);
         if (game.war) {
@@ -110,7 +123,7 @@ function showCards () {
             if (player.hand.length >= 2) {
                 getCardInfo(player, cardSlot); 
             } else {
-                let notEnough = document.createElement("li");
+                let notEnough = document.createElement("p");
                 notEnough.innerText = 'Not Enough Cards to play WAR';
                 cardSlot.appendChild(notEnough);
                 console.log(`${player.name} does not have enough cards to play WAR`);
