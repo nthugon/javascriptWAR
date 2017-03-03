@@ -4,6 +4,8 @@
 
         constructor () {
             this.suits = ['H', 'S', 'D', 'C'];
+            // 0, J, Q, K, A used to match deckofcardapi
+            // getInt method translates them later
             this.ranks = [2,3,4,5,6,7,8,9,0,'J','Q','K','A'];
             this.deck = [];
             this.players = [];
@@ -35,6 +37,7 @@
             return this.deck;
         }
 
+        // fisher-yates shuffle written semantically
         shuffleDeck(deck) {
             let cardsStillUnshuffled = deck.length;
             let randomFromUnshuffled;
@@ -50,6 +53,7 @@
 
         dealCards(players, deck) {
             let cardsLeft = deck;
+            // want to make sure each player gets the same amount
             while(cardsLeft.length >= players.length) {
                 players.forEach(player => {
                     let dealtCard = cardsLeft.pop();
@@ -59,6 +63,7 @@
         }
 
         playRound () {
+            // to stop the function if there is already a winner
             if (this.players.length === 1) {
                 return;
             }
@@ -76,6 +81,7 @@
 
         playWar () {
             this.resetTrackers();
+            // make sure players have enough cards to play WAR
             for (let i = this.players.length - 1; i >= 0; i--) {
                 if (this.players[i].hand.length < 2) {
                     this.pot.push(...this.players[i].hand);
@@ -112,12 +118,15 @@
         }
 
         findWinner (cardsToCompare) {
+            // for loop used in order to associate player with card
             for(let i = 0; i < cardsToCompare.length; i++) {
                 if (this.getInt(cardsToCompare[i]) > this.highCard) {
                     this.highCard = this.getInt(cardsToCompare[i]);
                     this.winner = this.players[i];
-                    this.war = false;
+                    this.war = false;    
                 } else if (this.getInt(cardsToCompare[i]) === this.highCard) {
+                    // since WAR round involves all players, no need to
+                    // track which player drew the same card
                     this.war = true;
                 }
             }
@@ -138,6 +147,7 @@
         }
 
         removeLosers () {
+            // reverse for loop so players can be removed as loop executes
             for (let i = this.players.length - 1; i >= 0; i--) {
                 if (this.players[i].hand.length === 0) {
                     this.players.splice(i, 1);

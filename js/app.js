@@ -4,6 +4,7 @@ const numberOfPlayers = document.getElementById("numberOfPlayers");
 const playersInfo = document.getElementById("playersInfo");
 var game;
 
+// to play the game atomatically in its entirety
 function automatedGame (players) { // eslint-disable-line no-unused-vars
     game = new Game();
     game.createPlayers(players);
@@ -34,6 +35,7 @@ var play = function() {
 
 function playRound() {
     playersInfo.innerHTML = '';
+    // separates each round of cards in console
     console.log('Playing Round');   
     showCards();
     game.playRound();
@@ -42,7 +44,6 @@ function playRound() {
     }
     if (game.players.length === 1) {
         announceWinner();
-        return;
     }
 }
 
@@ -50,6 +51,7 @@ function playWar() {
     playersInfo.innerHTML = '';
     showCards();
     game.playWar();
+    // toggle name of button
     playRoundButton.innerText = 'Play Round';
     if (game.war) {
         warMessage();
@@ -66,7 +68,9 @@ function warMessage () {
     warMessage.innerText = "We Have a WAR! Press the 'Play WAR' button to continue";
     warDiv.appendChild(warMessage);
     playersInfo.appendChild(warDiv);
+    // toggle name of button
     playRoundButton.innerText = 'Play WAR';
+    // separates each round of cards in console
     console.log('Playing WAR!');
 }
 
@@ -83,12 +87,14 @@ function showCards () {
         let card = document.createElement("img");
         let currentCard = null;
         if (game.war) {
+            // account for first card of WAR being face down
             currentCard = player.hand[player.hand.length - 2];
         } else {
             currentCard = player.hand[player.hand.length - 1];
         }
         card.src = `https://deckofcardsapi.com/static/img/${currentCard.rank}${currentCard.suit}.png`;
         cardSlot.appendChild(card);
+        // to track game play of each round
         console.log(`${player.name} has the ${currentCard.rank} of ${currentCard.suit} card with ${player.hand.length} cards left`);
     }
     game.players.forEach(player => {
@@ -100,6 +106,7 @@ function showCards () {
         cardTotal.innerText = `${player.hand.length} Cards Left`;
         cardSlot.appendChild(cardTotal);
         if (game.war) {
+            // make sure player has a WAR card to play
             if (player.hand.length >= 2) {
                 getCardInfo(player, cardSlot); 
             } else {

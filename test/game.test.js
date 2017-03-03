@@ -7,6 +7,7 @@ describe('Game class', () => {
     let startingTestHandAmount;
 
     function makeTestCards(players) {
+        // make sure the last player will always win
         for (let i = 0; i < players.length; i++) {
             players[i].hand = [
                 new Card('test', i + 2),
