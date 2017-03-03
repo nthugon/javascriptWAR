@@ -17,7 +17,14 @@ function automatedGame (players) { // eslint-disable-line no-unused-vars
 }
 
 var startGame = function() {
-    playersInfo.innerText = "Push 'Play Round' button to begin";
+    document.getElementById("playRound").disabled = false;
+    playersInfo.innerHTML = '';
+    let startDiv = document.createElement("div");
+    startDiv.classList.add("startDiv");
+    let startMessage = document.createElement("h2");
+    startMessage.innerText = "Push 'Play Round' button to begin";
+    startDiv.appendChild(startMessage);
+    playersInfo.appendChild(startDiv);
     game = new Game();
     game.createPlayers(numberOfPlayers.value);
     game.makeDeck();

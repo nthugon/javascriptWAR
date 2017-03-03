@@ -49,6 +49,19 @@ body {
     margin: 0;
 }
 
+.startDiv {
+    min-height: 314px;
+    background-image: url("https://deckofcardsapi.com/static/img/AH.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    margin: 10% 0 0;
+}
+
+.startDiv h2 {
+    font-size: 2em;
+    padding-top: 10%;
+}
+
 #welcome h2 {
     font-size: 2em;
 }
