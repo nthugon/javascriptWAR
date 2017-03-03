@@ -86,9 +86,12 @@ function warMessage () {
 
 function announceWinner () {
     playersInfo.innerHTML = '';
-    let winnerMessage = document.createElement("h2");
+    let winnerDiv = document.createElement("div");
+    winnerDiv.classList.add("winnerDiv");
+    let winnerMessage = document.createElement("h2"); 
     winnerMessage.innerText = `${game.players[0].name} is the winner!`;
-    playersInfo.appendChild(winnerMessage);
+    winnerDiv.appendChild(winnerMessage);
+    playersInfo.appendChild(winnerDiv);
     console.log(`${game.players[0].name} is the winner!`);
 }
 
