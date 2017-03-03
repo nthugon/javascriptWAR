@@ -75,7 +75,7 @@ function warMessage () {
     playersInfo.removeChild(playersInfo.lastChild);
     let warDiv = document.createElement("div");
     let warMessage = document.createElement("h2");
-    warMessage.innerText = "We Have a WAR! Press the 'Play WAR' button to continue";
+    warMessage.innerText = "We Have a WAR! Press the 'Play WAR' button to continue.";
     warDiv.appendChild(warMessage);
     playersInfo.appendChild(warDiv);
     // toggle name of button
